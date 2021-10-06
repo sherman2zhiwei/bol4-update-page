@@ -41,6 +41,11 @@ class Timer extends React.Component {
         fetch(uri)
             .then(response => response.json())
             .then(data => {
+                console.log(data)
+                this.setState({
+                    name: data.name,
+                    imageData: data.image.data,
+                })
                 this.interval = setInterval(() => {
                     let timeObject = msToDaysHoursMinutes(new Date - new Date(data.datetime))
 
@@ -49,7 +54,6 @@ class Timer extends React.Component {
                         hours: timeObject.hours,
                         minutes: timeObject.minutes,
                         seconds: timeObject.seconds,
-                        name: data.name,
                     })
                 }, 1000)
             })
@@ -61,7 +65,7 @@ class Timer extends React.Component {
         return <>
             {this.state.days 
                 ? 
-                <div class="h-full bg-filmlet bg-fixed">
+                <div class="h-screen bg-fixed" style={{background: `url('data:image/jpg;base64,${this.state.imageData}')`}}>
                     <div class="bg-black h-full bg-opacity-75 flex flex-col justify-center">
                         <div class="xl:flex items-center justify-center py-4">
                             {["days", "hours", "minutes", "seconds"].map(text => {
