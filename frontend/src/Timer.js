@@ -15,10 +15,26 @@ function msToDaysHoursMinutes(ms){
     return {days, hours, minutes, seconds};
 }
 
+function textToCard(text){
+    return (
+        <div class="flex justify-center space-x-4 w-min mx-4">
+            {text.split("").map(char => {
+                return (
+                    <div class="px-8 py-5 bg-red-500 shadow-md w-28 rounded-xl">
+                        <p class="text-7xl font-medium font-body text-white">{char}</p>
+                    </div>
+                )
+            })}
+        </div>
+    )
+
+
+}
+
 class Timer extends React.Component {
     constructor(props){
         super(props);
-        this.state = { datetime: null }
+        this.state = { days: null }
     }
 
     componentDidMount(){
@@ -32,7 +48,8 @@ class Timer extends React.Component {
                         days: timeObject.days,
                         hours: timeObject.hours,
                         minutes: timeObject.minutes,
-                        seconds: timeObject.seconds
+                        seconds: timeObject.seconds,
+                        name: data.name,
                     })
                 }, 1000)
             })
@@ -42,8 +59,29 @@ class Timer extends React.Component {
 
     render(){
         return <>
-            {this.state.days ? <h1>{`It has been ${this.state.days} days, ${this.state.hours} hours, ${this.state.minutes} minutes and ${this.state.seconds} seconds since Bol4's last comeback :(`}</h1> : <h2>Loading...</h2>}
+            {this.state.days 
+                ? 
+                <div class="h-full bg-filmlet bg-fixed">
+                    <div class="bg-black h-full bg-opacity-75 flex flex-col justify-center">
+                        <div class="xl:flex items-center justify-center py-4">
+                            {["days", "hours", "minutes", "seconds"].map(text => {
+                                return (
+                                    <div class="flex items-center py-4 text-center">
+                                        {textToCard(this.state[text].toString())}
+                                        <p class="text-5xl font-body font-black text-white"> {text}, </p>
+                                    </div> 
+                                )
+                            })
 
+                            }
+                        </div>
+
+                        <p class="xl:text-center text-5xl mx-5 font-body font-black text-white"> since Bol4's Last Comeback : {this.state.name}</p> 
+                    </div>
+                </div>
+                    
+                : null
+            }
         </>
     }
 }
