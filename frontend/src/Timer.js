@@ -1,5 +1,4 @@
 import React from 'react'
-const uri="http://localhost:8080/last-comeback-date"
 
 function msToDaysHoursMinutes(ms){
     let days = Math.floor(ms / (24*60*60*1000));
@@ -38,10 +37,31 @@ class Timer extends React.Component {
     }
 
     componentDidMount(){
+        const dateNow = new Date().toISOString()
+        const uri=`http://localhost:8080/last-comeback-date?datetime=${encodeURIComponent(dateNow)}`
+
+        const nextComeback=`http://localhost:8080/next-comeback-date?datetime=${encodeURIComponent(dateNow)}`
+
+        console.log(nextComeback)
+        fetch(nextComeback)
+            .then(response => response.json())
+            .then(data => {
+                if (data.datetime == null){
+                    this.setState({
+                        nextComeback: {}
+                    })
+                } else {
+                    this.setState({
+                        nextComeback: data
+                    })
+                }
+            })
+            .catch(error => console.log(error))
+
+
         fetch(uri)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 this.setState({
                     name: data.name,
                     imageData: data.image.data,
@@ -58,6 +78,10 @@ class Timer extends React.Component {
                 }, 1000)
             })
             .catch(error => console.log(error))
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.interval)
     }
 
 
