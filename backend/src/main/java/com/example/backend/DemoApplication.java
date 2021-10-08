@@ -35,6 +35,7 @@ public class DemoApplication implements CommandLineRunner{
 		// repository.save(new ComebackDate(LocalDateTime.of(2020, 10, 23, 12, 0), "Red Puberty"));
 
 		System.out.println(repository.findFirstByOrderByIdDesc());
+		System.out.println(repository.findFirstByDatetimeGreaterThanOrderByIdDesc(LocalDateTime.of(2020, 11, 5, 17, 0)));
 
 
 	}
